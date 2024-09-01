@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard Tiếng Trung</title>
+    <title>Chinese Flashcards</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="main-container">
-        <div class="side-menu">
-            <h2>Menu</h2>
-            <button onclick="startAutoPlay('sequential')">Phát Tuần Tự</button>
-            <button onclick="startAutoPlay('random')">Phát Ngẫu Nhiên</button>
-            <button onclick="stopAutoPlay()">Dừng Phát</button>
-            <button id="exit-review" onclick="exitReviewMode()">Thoát Ôn Tập</button>
-            <label>Thời gian hiện từ (giây): <input type="number" id="display-time" value="3" min="1" /></label>
-            <label><input type="checkbox" id="auto-flip" /> Tự động lật thẻ</label>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <button onclick="startAutoPlay('sequential')">Sequential Play</button>
+                <button onclick="startAutoPlay('random')">Random Play</button>
+                <button onclick="stopAutoPlay()">Stop Play</button>
+                <button id="exit-review" onclick="exitReviewMode()">Exit Review</button>
+                <label>Display Time (seconds): <input type="number" id="display-time" value="3" min="1" /></label>
+                <label><input type="checkbox" id="auto-flip" /> Auto Flip</label>
+                <button class="review-button" onclick="startReview()">Review</button>
+            </div>
         </div>
         <div class="container">
-            <h1>Flashcard Tiếng Trung</h1>
+            <h1>Chinese Flashcards</h1>
             <input type="file" id="upload" accept=".xlsx, .xls">
             <div class="progress-bar">
                 <div id="progress"></div>
             </div>
-            <div class="flashcard-container">
+            <div class="flashcard-container" id="flashcard-container">
                 <div class="flashcard" id="flashcard">
-                    <div class="front">Tải lên tệp Excel để bắt đầu</div>
+                    <div class="front">Upload an Excel file to start</div>
                     <div class="back">
                         <strong id="meaning"></strong><br>
                         <span id="note"></span><br>
@@ -35,20 +38,14 @@
             </div>
             <div id="play-sound-container">
                 <button id="play-sound">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Volume_Up_icon.svg" alt="Speaker" style="width: 30px; height: 30px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/1024px-Speaker_Icon.svg.png" alt="Speaker" style="width: 30px; height: 30px;">
                 </button>
             </div>
-            <div class="controls">
-                <button onclick="prevCard()">Trước</button>
-                <button onclick="nextCard()">Tiếp theo</button>
-            </div>
             <div class="memory-controls">
-                <button onclick="markRemembered()">Nhớ</button>
-                <button onclick="markNotSure()">Chưa Nhớ Lắm</button>
-                <button onclick="markForgotten()">Chưa Nhớ</button>
+                <button onclick="markRemembered()">Remembered</button>
+                <button onclick="markNotSure()">Not Sure</button>
+                <button onclick="markForgotten()">Forgotten</button>
             </div>
-            <button class="review-button" onclick="startReview()">Ôn Tập</button>
-
             <audio id="audio-player" controls style="display: none;"></audio>
         </div>
     </div>

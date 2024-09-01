@@ -73,13 +73,15 @@ function handleFileUpload(event) {
 }
 
 function getGoogleTranslateAudioUrl(text) {
-    const corsProxy = "https://cors-anywhere.herokuapp.com/"; // You can use other CORS proxy services
-    const googleTranslateUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
-    return corsProxy + googleTranslateUrl;
+    return `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
 }
 
-
 function updateFlashcard() {
+    if (flashcards.length === 0 || currentCardIndex < 0 || currentCardIndex >= flashcards.length) {
+        console.error('Invalid currentCardIndex or empty flashcards array.');
+        return;
+    }
+
     const flashcardElement = document.getElementById('flashcard');
     const frontElement = flashcardElement.querySelector('.front');
     const backElement = flashcardElement.querySelector('.back');
@@ -153,10 +155,12 @@ function playSound(event) {
     const audioPlayer = document.getElementById('audio-player');
     const currentCard = flashcards[currentCardIndex];
 
-    if (currentCard.audioUrl) {
+    // Check if currentCard is defined and has an audioUrl property
+    if (currentCard && currentCard.audioUrl) {
         audioPlayer.src = currentCard.audioUrl;
         audioPlayer.play().catch(error => console.log('Playback failed:', error));
     } else {
+        console.error('No audio available or currentCard is undefined.');
         alert('No audio available for this word.');
     }
 }

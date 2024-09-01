@@ -13,8 +13,9 @@
             <button onclick="startAutoPlay('sequential')">Phát Tuần Tự</button>
             <button onclick="startAutoPlay('random')">Phát Ngẫu Nhiên</button>
             <button onclick="stopAutoPlay()">Dừng Phát</button>
+            <button id="exit-review" onclick="exitReviewMode()">Thoát Ôn Tập</button>
             <label>Thời gian hiện từ (giây): <input type="number" id="display-time" value="3" min="1" /></label>
-            <label><input type="checkbox" id="auto-flip-checkbox"> Tự động lật thẻ</label>
+            <label><input type="checkbox" id="auto-flip" /> Tự động lật thẻ</label>
         </div>
         <div class="container">
             <h1>Flashcard Tiếng Trung</h1>
@@ -28,12 +29,14 @@
                     <div class="back">
                         <strong id="meaning"></strong><br>
                         <span id="note"></span><br>
-                        <span id="example"></span><br>
-                        <button id="play-sound">
-                            <img src="https://e7.pngegg.com/pngimages/303/946/png-clipart-loudspeaker-computer-icons-symbol-speaker-icon-miscellaneous-angle-thumbnail.png" alt="Speaker" style="width: 30px; height: 30px;">
-                        </button>
+                        <span id="example"></span>
                     </div>
                 </div>
+            </div>
+            <div id="play-sound-container">
+                <button id="play-sound">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Volume_Up_icon.svg" alt="Speaker" style="width: 30px; height: 30px;">
+                </button>
             </div>
             <div class="controls">
                 <button onclick="prevCard()">Trước</button>
@@ -46,7 +49,6 @@
             </div>
             <button class="review-button" onclick="startReview()">Ôn Tập</button>
 
-            <!-- Thêm audio player ẩn -->
             <audio id="audio-player" controls style="display: none;"></audio>
         </div>
     </div>

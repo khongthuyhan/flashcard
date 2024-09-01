@@ -134,7 +134,7 @@ body {
     transform: rotateY(180deg);
 }
 
-.flashcard.flipped .back {
+flashcard.flipped .back {
     transform: rotateY(0deg);
 }
 

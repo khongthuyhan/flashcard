@@ -123,12 +123,26 @@ function playSound(event) {
     const currentCard = flashcards[currentCardIndex];
 
     if (currentCard.audioUrl) {
-        audioPlayer.src = currentCard.audioUrl;
-        audioPlayer.play();
+        // Sử dụng phần tử audio để phát âm thanh
+        if (audioPlayer.paused) {
+            audioPlayer.src = currentCard.audioUrl;
+            audioPlayer.play().catch(error => console.log('Playback failed:', error));
+        } else {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
     } else {
         alert('Không có âm thanh cho từ này.');
     }
 }
+
+document.getElementById('flashcard').addEventListener('click', () => {
+    if (audioPlayer && !audioPlayer.paused) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    }
+});
+
 
 function updateProgressBar() {
     const progressElement = document.getElementById('progress');

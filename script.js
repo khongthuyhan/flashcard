@@ -9,8 +9,6 @@ let playIndex = 0;
 document.getElementById('upload').addEventListener('change', handleFileUpload);
 document.getElementById('flashcard').addEventListener('click', flipCard);
 document.getElementById('play-sound').addEventListener('click', playSound);
-document.getElementById('export-review').addEventListener('click', exportReviewWords);
-document.getElementById('exit-review').addEventListener('click', exitReviewMode);
 
 window.onload = function() {
     loadProgress();
@@ -32,14 +30,13 @@ function handleFileUpload(event) {
             pinyin: row[2],
             meaning: row[3],
             note: row[4],
-            audioUrl: getGoogleTranslateAudioUrl(row[1]), // Tạo URL âm thanh từ Google Translate API
+            audioUrl: getGoogleTranslateAudioUrl(row[1]),
             status: 'not-seen' // Trạng thái ban đầu của thẻ
         }));
 
-        if (!playOrder.length) {
-            playOrder = Array.from(Array(flashcards.length).keys());
-        }
-        
+        currentCardIndex = 0;
+        isFlipped = false;
+        playOrder = Array.from(Array(flashcards.length).keys());
         updateFlashcard();
     };
 
@@ -68,8 +65,7 @@ function updateFlashcard() {
 
 function flipCard() {
     isFlipped = !isFlipped;
-    const flashcardElement = document.getElementById('flashcard');
-    flashcardElement.classList.toggle('flipped', isFlipped);
+    updateFlashcard();
 }
 
 function prevCard() {
@@ -116,6 +112,10 @@ function startReview() {
     }
 }
 
+function exitReviewMode() {
+    window.location.reload(); // Đơn giản là tải lại trang để thoát chế độ ôn tập
+}
+
 function playSound(event) {
     event.stopPropagation(); // Ngăn chặn việc lật thẻ khi nhấn vào loa
 
@@ -123,7 +123,6 @@ function playSound(event) {
     const currentCard = flashcards[currentCardIndex];
 
     if (currentCard.audioUrl) {
-        // Sử dụng phần tử audio để phát âm thanh
         if (audioPlayer.paused) {
             audioPlayer.src = currentCard.audioUrl;
             audioPlayer.play().catch(error => console.log('Playback failed:', error));
@@ -136,14 +135,6 @@ function playSound(event) {
     }
 }
 
-document.getElementById('flashcard').addEventListener('click', () => {
-    if (audioPlayer && !audioPlayer.paused) {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-    }
-});
-
-
 function updateProgressBar() {
     const progressElement = document.getElementById('progress');
     const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
@@ -153,12 +144,8 @@ function updateProgressBar() {
 function startAutoPlay(type) {
     stopAutoPlay(); // Dừng bất kỳ auto play nào đang chạy
 
-    playIndex = 0; // Đặt lại playIndex
-
     if (type === 'random') {
         shuffleArray(playOrder); // Đảo ngẫu nhiên thứ tự chỉ một lần khi bắt đầu
-    } else {
-        playOrder = Array.from(Array(flashcards.length).keys()); // Phát tuần tự
     }
 
     autoPlayInterval = setInterval(() => {
@@ -169,6 +156,12 @@ function startAutoPlay(type) {
             isFlipped = false;
             updateFlashcard();
             playSound(new Event('click'));
+
+            if (document.getElementById('auto-flip').checked) {
+                setTimeout(() => {
+                    flipCard();
+                }, document.getElementById('display-time').value * 500); // Lật thẻ sau 50% thời gian
+            }
 
             playIndex++;
         }
@@ -205,33 +198,4 @@ function loadProgress() {
         playIndex = savedProgress.playIndex;
         updateFlashcard();
     }
-}
-
-function exportReviewWords() {
-    const reviewCards = flashcards.filter(card => card.status === 'not-sure' || card.status === 'forgotten');
-
-    if (reviewCards.length === 0) {
-        alert('Bạn đã nhớ hết các từ! Không có gì để ôn tập.');
-        return;
-    }
-
-    const worksheet = XLSX.utils.json_to_sheet(reviewCards.map(card => ({
-        Hanzi: card.hanzi,
-        Pinyin: card.pinyin,
-        Meaning: card.meaning,
-        Note: card.note
-    })));
-
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Review Words');
-
-    XLSX.writeFile(workbook, 'review_words.xlsx');
-}
-
-function exitReviewMode() {
-    loadProgress(); // Tải lại tiến trình lưu trước đó
-    stopAutoPlay(); // Dừng bất kỳ phát tự động nào
-    currentCardIndex = 0;
-    isFlipped = false;
-    updateFlashcard();
 }

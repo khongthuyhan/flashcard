@@ -2,17 +2,12 @@ let flashcards = [];
 let currentCardIndex = 0;
 let isFlipped = false;
 let autoPlayInterval;
-let autoPlayType = 'sequential';
 let playOrder = [];
 let playIndex = 0;
 
 document.getElementById('upload').addEventListener('change', handleFileUpload);
 document.getElementById('flashcard').addEventListener('click', flipCard);
 document.getElementById('play-sound').addEventListener('click', playSound);
-
-window.onload = function() {
-    loadProgress();
-};
 
 function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -26,12 +21,12 @@ function handleFileUpload(event) {
         const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
         flashcards = json.slice(1).filter(row => row[1]).map(row => ({
-            hanzi: row[1], // Sử dụng cột 2 (dòng 2 đến cuối) làm từ tiếng Trung
+            hanzi: row[1],
             pinyin: row[2],
             meaning: row[3],
             note: row[4],
             audioUrl: getGoogleTranslateAudioUrl(row[1]),
-            status: 'not-seen' // Trạng thái ban đầu của thẻ
+            status: 'not-seen'
         }));
 
         currentCardIndex = 0;
@@ -60,7 +55,6 @@ function updateFlashcard() {
 
     flashcardElement.classList.toggle('flipped', isFlipped);
     updateProgressBar();
-    saveProgress();
 }
 
 function flipCard() {
@@ -113,23 +107,18 @@ function startReview() {
 }
 
 function exitReviewMode() {
-    window.location.reload(); // Đơn giản là tải lại trang để thoát chế độ ôn tập
+    window.location.reload(); // Tải lại trang để thoát chế độ ôn tập
 }
 
 function playSound(event) {
-    event.stopPropagation(); // Ngăn chặn việc lật thẻ khi nhấn vào loa
+    event.stopPropagation();
 
     const audioPlayer = document.getElementById('audio-player');
     const currentCard = flashcards[currentCardIndex];
 
     if (currentCard.audioUrl) {
-        if (audioPlayer.paused) {
-            audioPlayer.src = currentCard.audioUrl;
-            audioPlayer.play().catch(error => console.log('Playback failed:', error));
-        } else {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-        }
+        audioPlayer.src = currentCard.audioUrl;
+        audioPlayer.play().catch(error => console.log('Playback failed:', error));
     } else {
         alert('Không có âm thanh cho từ này.');
     }
@@ -142,15 +131,17 @@ function updateProgressBar() {
 }
 
 function startAutoPlay(type) {
-    stopAutoPlay(); // Dừng bất kỳ auto play nào đang chạy
+    stopAutoPlay();
 
     if (type === 'random') {
-        shuffleArray(playOrder); // Đảo ngẫu nhiên thứ tự chỉ một lần khi bắt đầu
+        shuffleArray(playOrder);
     }
+
+    playIndex = 0;
 
     autoPlayInterval = setInterval(() => {
         if (playIndex >= playOrder.length) {
-            stopAutoPlay(); // Dừng khi phát hết
+            stopAutoPlay();
         } else {
             currentCardIndex = playOrder[playIndex];
             isFlipped = false;
@@ -160,7 +151,7 @@ function startAutoPlay(type) {
             if (document.getElementById('auto-flip').checked) {
                 setTimeout(() => {
                     flipCard();
-                }, document.getElementById('display-time').value * 500); // Lật thẻ sau 50% thời gian
+                }, document.getElementById('display-time').value * 500);
             }
 
             playIndex++;
@@ -177,25 +168,4 @@ function shuffleArray(array) {
 
 function stopAutoPlay() {
     clearInterval(autoPlayInterval);
-}
-
-function saveProgress() {
-    const progressData = {
-        flashcards: flashcards,
-        currentCardIndex: currentCardIndex,
-        playOrder: playOrder,
-        playIndex: playIndex
-    };
-    localStorage.setItem('flashcardProgress', JSON.stringify(progressData));
-}
-
-function loadProgress() {
-    const savedProgress = JSON.parse(localStorage.getItem('flashcardProgress'));
-    if (savedProgress) {
-        flashcards = savedProgress.flashcards;
-        currentCardIndex = savedProgress.currentCardIndex;
-        playOrder = savedProgress.playOrder;
-        playIndex = savedProgress.playIndex;
-        updateFlashcard();
-    }
 }

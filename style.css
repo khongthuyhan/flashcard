@@ -98,11 +98,11 @@ body {
 }
 
 .flashcard .front {
-    font-size: 80px; /* Chữ mặt trước to */
+    font-size: 80px;
 }
 
 .flashcard .back {
-    font-size: 32px; /* Chữ mặt sau nhỏ hơn */
+    font-size: 32px;
 }
 
 .flashcard .front, .flashcard .back {
@@ -140,10 +140,10 @@ body {
 }
 
 .memory-controls {
-    margin-top: -30px;
+    margin-top: 20px;
     display: flex;
-    justify-content: space-between; /* Chia đều các nút */
-    max-width: 300px;
+    justify-content: space-between;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -196,4 +196,50 @@ button:hover {
     border: none;
     cursor: pointer;
     margin-top: 10px;
+}
+
+/* Media Queries for Mobile */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .side-menu {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .flashcard {
+        font-size: 60px; /* Giảm kích thước chữ cho thiết bị nhỏ hơn */
+        max-width: 100%;
+        height: 200px;
+    }
+
+    .flashcard .front {
+        font-size: 50px; /* Điều chỉnh kích thước chữ mặt trước cho điện thoại */
+    }
+
+    .flashcard .back {
+        font-size: 28px; /* Điều chỉnh kích thước chữ mặt sau cho điện thoại */
+    }
+
+    .controls, .memory-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 90%;
+        margin-bottom: 10px;
+    }
+
+    .progress-bar {
+        max-width: 100%;
+    }
 }

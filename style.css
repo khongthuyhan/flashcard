@@ -1,0 +1,199 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f4f8;
+    margin: 0;
+}
+
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 80%;
+}
+
+.side-menu {
+    width: 20%;
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.side-menu h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.side-menu button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #2980b9;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.side-menu button:hover {
+    background-color: #3498db;
+}
+
+.side-menu label {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.side-menu input[type="number"] {
+    width: 50px;
+    margin-left: 10px;
+}
+
+.container {
+    text-align: center;
+    width: 80%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-container {
+    perspective: 1000px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.flashcard {
+    width: 100%;
+    max-width: 700px;
+    height: 250px;
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans SC', sans-serif;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    overflow: hidden;
+}
+
+.flashcard .front {
+    font-size: 80px; /* Chữ mặt trước to */
+}
+
+.flashcard .back {
+    font-size: 32px; /* Chữ mặt sau nhỏ hơn */
+}
+
+.flashcard .front, .flashcard .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.flashcard .back {
+    transform: rotateY(180deg);
+}
+
+.flashcard.flipped .front {
+    transform: rotateY(180deg);
+}
+
+.flashcard.flipped .back {
+    transform: rotateY(0deg);
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.memory-controls {
+    margin-top: -30px;
+    display: flex;
+    justify-content: space-between; /* Chia đều các nút */
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.review-button {
+    margin-top: 20px;
+    background-color: #27ae60;
+}
+
+.review-button:hover {
+    background-color: #2ecc71;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e4e8;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 10px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#progress {
+    height: 100%;
+    width: 0%;
+    background-color: #2980b9;
+    border-radius: 5px;
+}
+
+#play-sound {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}

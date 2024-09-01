@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Tiếng Trung</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="side-menu">
+            <h2>Menu</h2>
+            <button onclick="startAutoPlay('sequential')">Phát Tuần Tự</button>
+            <button onclick="startAutoPlay('random')">Phát Ngẫu Nhiên</button>
+            <button onclick="stopAutoPlay()">Dừng Phát</button>
+            <label>Thời gian hiện từ (giây): <input type="number" id="display-time" value="3" min="1" /></label>
+            <label><input type="checkbox" id="auto-flip-checkbox"> Tự động lật thẻ</label>
+        </div>
+        <div class="container">
+            <h1>Flashcard Tiếng Trung</h1>
+            <input type="file" id="upload" accept=".xlsx, .xls">
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="front">Tải lên tệp Excel để bắt đầu</div>
+                    <div class="back">
+                        <strong id="meaning"></strong><br>
+                        <span id="note"></span><br>
+                        <span id="example"></span><br>
+                        <button id="play-sound">
+                            <img src="https://e7.pngegg.com/pngimages/303/946/png-clipart-loudspeaker-computer-icons-symbol-speaker-icon-miscellaneous-angle-thumbnail.png" alt="Speaker" style="width: 30px; height: 30px;">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="prevCard()">Trước</button>
+                <button onclick="nextCard()">Tiếp theo</button>
+            </div>
+            <div class="memory-controls">
+                <button onclick="markRemembered()">Nhớ</button>
+                <button onclick="markNotSure()">Chưa Nhớ Lắm</button>
+                <button onclick="markForgotten()">Chưa Nhớ</button>
+            </div>
+            <button class="review-button" onclick="startReview()">Ôn Tập</button>
+
+            <!-- Thêm audio player ẩn -->
+            <audio id="audio-player" controls style="display: none;"></audio>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

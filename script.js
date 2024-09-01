@@ -73,8 +73,11 @@ function handleFileUpload(event) {
 }
 
 function getGoogleTranslateAudioUrl(text) {
-    return `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
+    const corsProxy = "https://cors-anywhere.herokuapp.com/"; // You can use other CORS proxy services
+    const googleTranslateUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
+    return corsProxy + googleTranslateUrl;
 }
+
 
 function updateFlashcard() {
     const flashcardElement = document.getElementById('flashcard');

@@ -8,12 +8,46 @@ let playIndex = 0;
 document.getElementById('upload').addEventListener('change', handleFileUpload);
 document.getElementById('flashcard').addEventListener('click', flipCard);
 document.getElementById('play-sound').addEventListener('click', playSound);
+document.getElementById('flashcard-container').addEventListener('touchstart', handleTouchStart, false);
+document.getElementById('flashcard-container').addEventListener('touchmove', handleTouchMove, false);
+
+let xDown = null;
+let yDown = null;
+
+function handleTouchStart(evt) {
+    const firstTouch = evt.touches[0];
+    xDown = firstTouch.clientX;
+    yDown = firstTouch.clientY;
+}
+
+function handleTouchMove(evt) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    let xUp = evt.touches[0].clientX;
+    let yUp = evt.touches[0].clientY;
+
+    let xDiff = xDown - xUp;
+    let yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+            nextCard(); // Swipe left
+        } else {
+            prevCard(); // Swipe right
+        }
+    }
+
+    xDown = null;
+    yDown = null;
+}
 
 function handleFileUpload(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
@@ -102,12 +136,12 @@ function startReview() {
         playOrder = Array.from(Array(flashcards.length).keys());
         updateFlashcard();
     } else {
-        alert('Bạn đã nhớ hết các từ! Không có gì để ôn tập.');
+        alert('You have remembered all the words! Nothing to review.');
     }
 }
 
 function exitReviewMode() {
-    window.location.reload(); // Tải lại trang để thoát chế độ ôn tập
+    window.location.reload();
 }
 
 function playSound(event) {
@@ -120,7 +154,7 @@ function playSound(event) {
         audioPlayer.src = currentCard.audioUrl;
         audioPlayer.play().catch(error => console.log('Playback failed:', error));
     } else {
-        alert('Không có âm thanh cho từ này.');
+        alert('No audio available for this word.');
     }
 }
 
